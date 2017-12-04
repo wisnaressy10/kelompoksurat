@@ -1,9 +1,9 @@
-object masuk2: Tmasuk2
-  Left = 359
-  Top = 230
-  Width = 810
-  Height = 401
-  Caption = 'Surat Masuk'
+object tlelang2: Ttlelang2
+  Left = 324
+  Top = 67
+  Width = 813
+  Height = 404
+  Caption = 'surat lelang diterima'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,9 +15,9 @@ object masuk2: Tmasuk2
   PixelsPerInch = 96
   TextHeight = 13
   object pnl1: TPanel
-    Left = -8
+    Left = 0
     Top = 0
-    Width = 801
+    Width = 793
     Height = 57
     Color = clWhite
     TabOrder = 0
@@ -97,7 +97,7 @@ object masuk2: Tmasuk2
   object frxdbdtst1: TfrxDBDataset
     UserName = 'frxDBDataset1'
     CloseDataSource = False
-    DataSource = DataModule1.dsufi
+    DataSet = DataModule1.tabelwisna
     BCDToCurrency = False
     Left = 688
     Top = 80

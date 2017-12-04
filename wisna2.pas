@@ -1,4 +1,4 @@
-unit ufi;
+unit wisna2;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Dialogs, frxClass, frxPreview, frxDBSet, frxExportPDF, StdCtrls, ExtCtrls,ShellAPI;
 
 type
-  Tmasuk2 = class(TForm)
+  Ttlelang2 = class(TForm)
     pnl1: TPanel;
     pnl2: TPanel;
     btn1: TButton;
@@ -15,8 +15,8 @@ type
     frxrprt1: TfrxReport;
     frxdbdtst1: TfrxDBDataset;
     frxprvw1: TfrxPreview;
-    procedure frxrprt1BeforePrint(Sender: TfrxReportComponent);
     procedure FormShow(Sender: TObject);
+    procedure frxrprt1BeforePrint(Sender: TfrxReportComponent);
     procedure btn1Click(Sender: TObject);
   private
     { Private declarations }
@@ -27,16 +27,16 @@ function waktu: string;
   end;
 
 var
-  masuk2: Tmasuk2;
+  tlelang2: Ttlelang2;
 
 implementation
 
 uses
-  Unit1, dm, ufi1;
+  Unit1, dm, wisna;
 
 {$R *.dfm}
 
-procedure Tmasuk2.DelFilesFrom(Directory, Filemask: string;
+procedure Ttlelang2.DelFilesFrom(Directory, Filemask: string;
   DelSubDirs: Boolean);
 var Sourcelst : string;
   FOS : TSHFileOpStruct;
@@ -52,59 +52,58 @@ begin
   SHFileOperation(FOS);
 end;
 
-function Tmasuk2.waktu: string;
+procedure Ttlelang2.FormShow(Sender: TObject);
+begin
+  frxrprt1.LoadFromFile(ExtractFilePath(Application.ExeName)+'PreviewScanPdfwisna.fr3');
+  frxrprt1.FileName:=ExtractFilePath(Application.ExeName)+'PreviewScanPdfwisna.fr3';
+  frxrprt1.ShowReport();
+  end;
+
+function Ttlelang2.waktu: string;
 var tgl : TDateTime;
 begin
 tgl :=now();
 Result:= FormatDateTime('yyyy', tgl);
 end;
-
-procedure Tmasuk2.frxrprt1BeforePrint(Sender: TfrxReportComponent);
+procedure Ttlelang2.frxrprt1BeforePrint(Sender: TfrxReportComponent);
 var img : TfrxComponent;
 begin
   try
     img:=frxrprt1.FindObject('Picture1');
     TfrxPictureView(img).Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+
-    '\lGambar\'+DataModule1.tabelufi.FieldValues['Image']);
+    '\kGambar\'+DataModule1.tabelwisna.FieldValues['Image']);
     except
       ShowMessage('Objek Tidak DItemukan');
     end;
 end;
-
-procedure Tmasuk2.FormShow(Sender: TObject);
-begin
-frxrprt1.LoadFromFile(ExtractFilePath(Application.ExeName)+'PreviewScanPdfufi.fr3');
-  frxrprt1.FileName:=ExtractFilePath(Application.ExeName)+'PreviewScanPdfufi.fr3';
-  frxrprt1.ShowReport();
-end;
-
-procedure Tmasuk2.btn1Click(Sender: TObject);
+procedure Ttlelang2.btn1Click(Sender: TObject);
 var namapdf:string;
 var PDFku: TfrxCustomExportFilter;
 lokasihapus : string;
 begin
-with DataModule1.z_ufi do
+with DataModule1.z_wisnar do
 begin
     if asalScan = 0 then
   begin
-  namapdf := 'Surat Masuk'+masuk.Edt1.Text+masuk.Edt2.Text+'.pdf';
+  namapdf := tlelang1.Edt1.Text+'-'+tlelang1.Edt2.Text+'-'+waktu+ ' -Surat-terima-lelang.pdf';
   PDFku := TfrxCustomExportFilter(frxPDFExport1);
   PDFku.ShowDialog := False;
-  PDFku.FileName := ExtractFilePath(Application.ExeName)+'\lPDF\'+namapdf;
+  PDFku.FileName := ExtractFilePath(Application.ExeName)+'\kPDF\'+namapdf;
   frxrprt1.PrepareReport(false);
   frxrprt1.Export(PDFku);
-  masuk.lbl5.Caption := namapdf;
+  tlelang1.lbl5.Caption := namapdf;
   end;
 
-  DataModule1.tabelufi.Clear;
-  lokasihapus := (ExtractFilePath(Application.ExeName)+'\lGambar\');
+  DataModule1.tabelwisna.Clear;
+  lokasihapus := (ExtractFilePath(Application.ExeName)+'\Gambar_scan\');
   DelFilesFrom(lokasihapus, '*.*', False);
-  namapdf := 'Surat Masuk'+masuk.Edt1.Text+masuk.Edt2.Text+'.pdf';
-  DataModule1.z_ufi.Active:=True;
-  DataModule1.z_ufi.Append;
-  DataModule1.z_ufi.FieldByName('nama_file').AsString := namapdf;
-  DataModule1.z_ufi.Post;
-  masuk2.Close;
+  namapdf := 'Surat Terima Lelang'+tlelang1.Edt1.Text+tlelang1.Edt2.Text+'.pdf';
+  DataModule1.z_wisnar.Active:=True;
+  DataModule1.z_wisnar.Append;
+  DataModule1.z_wisnar.FieldByName('nama_file').AsString := namapdf;
+  DataModule1.z_wisnar.Post;
+  tlelang2.Close;
 end;
 end;
+
 end.
